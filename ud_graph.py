@@ -46,7 +46,7 @@ class UndirectedGraph:
         """
         Adds a new vertex to the graph.
         Will not allow vertex to be added if a vertex of the same name exists in the graph.
-        param v: vertex to add
+        param v: graph vertex
         return: None
         """
         # do not allow a vertex of the same name to be added
@@ -59,8 +59,8 @@ class UndirectedGraph:
         """
         Adds a new edge to the graph. Will create vertex when the passed in vertex is not in the graph.
         Will not allow duplicate edges to be made.
-        param u: vertex to connect
-        param v: vertex to connect
+        param u: graph vertex
+        param v: graph vertex
         return: None
         """
         # handle duplicate edges or u and v being the same vertex
@@ -79,15 +79,31 @@ class UndirectedGraph:
         
     def remove_edge(self, v: str, u: str) -> None:
         """
-        Remove edge from the graph
+        Removes the edge between the passed-in vertices.
+        param v: graph vertex
+        param u: graph vertex
+        return: None
         """
+        if v not in self.adj_list or u not in self.adj_list or v not in self.adj_list[u]:
+            return
         
+        self.adj_list[u].remove(v)
+        self.adj_list[v].remove(u)
 
     def remove_vertex(self, v: str) -> None:
         """
-        Remove vertex and all connected edges
+        Removes the vertex, and all edges incident upon it, from the graph.
+        param v: graph vertex
+        return: None
         """
+        if v not in self.adj_list:
+            return
         
+        self.adj_list.pop(v)
+
+        for key in self.adj_list:
+            if v in self.adj_list[key]:
+                self.adj_list[key].remove(v)
 
     def get_vertices(self) -> []:
         """
@@ -138,32 +154,32 @@ class UndirectedGraph:
 
 if __name__ == '__main__':
 
-    print("\nPDF - method add_vertex() / add_edge example 1")
-    print("----------------------------------------------")
-    g = UndirectedGraph()
-    print(g)
-
-    for v in 'ABCDE':
-        g.add_vertex(v)
-    print(g)
-
-    g.add_vertex('A')
-    print(g)
-
-    for u, v in ['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE', ('B', 'C')]:
-        g.add_edge(u, v)
-    print(g)
-
-
-    # print("\nPDF - method remove_edge() / remove_vertex example 1")
-    # print("----------------------------------------------------")
-    # g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE'])
-    # g.remove_vertex('DOES NOT EXIST')
-    # g.remove_edge('A', 'B')
-    # g.remove_edge('X', 'B')
+    # print("\nPDF - method add_vertex() / add_edge example 1")
+    # print("----------------------------------------------")
+    # g = UndirectedGraph()
     # print(g)
-    # g.remove_vertex('D')
+
+    # for v in 'ABCDE':
+    #     g.add_vertex(v)
     # print(g)
+
+    # g.add_vertex('A')
+    # print(g)
+
+    # for u, v in ['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE', ('B', 'C')]:
+    #     g.add_edge(u, v)
+    # print(g)
+
+
+    print("\nPDF - method remove_edge() / remove_vertex example 1")
+    print("----------------------------------------------------")
+    g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE'])
+    g.remove_vertex('DOES NOT EXIST')
+    g.remove_edge('A', 'B')
+    g.remove_edge('X', 'B')
+    print(g)
+    g.remove_vertex('D')
+    print(g)
 
 
     # print("\nPDF - method get_vertices() / get_edges() example 1")
