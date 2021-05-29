@@ -237,7 +237,7 @@ class UndirectedGraph:
         """
         # transform copy of list in to a heap
         new_lst = list(lst)
-        heapq.heapify(lst)
+        heapq.heapify(new_lst)
 
         # pop the min value continuously in to a new list
         return [heapq.heappop(new_lst) for _ in range(len(lst))]
