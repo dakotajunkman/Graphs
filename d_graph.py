@@ -115,6 +115,8 @@ class DirectedGraph:
         """
         edges = []
 
+        # loop over each position in the matrix
+        # when value at the position is non-zero an edge exists and is added to the edge list
         for i in range(len(self.adj_matrix)):
             for j in range(len(self.adj_matrix[i])):
                 if self.adj_matrix[i][j] != 0:
@@ -123,9 +125,26 @@ class DirectedGraph:
 
     def is_valid_path(self, path: []) -> bool:
         """
-        TODO: Write this implementation
+        Determines if a valid path exists from the start vertex to end vertex.
+        param path: list of vertices in the path
+        return: True when path is valid, else False
         """
-        pass
+        if len(path) == 0 or (len(path) == 1 and 0 <= path[0] < self.v_count):
+            return True
+        
+        if len(path) == 1 and not (0 <= path[0] < self.v_count):
+            return False
+        
+        # start at second vertex and loop
+        # check previous vertex for an edge to the current vertex
+        # return False when an edge doesn't exist
+        # when end of loop is reached we can return True
+        for i in range(1, len(path)):
+            cur = path[i]
+            prev = path[i - 1]
+            if self.adj_matrix[prev][cur] == 0:
+                return False
+        return True
 
     def dfs(self, v_start, v_end=None) -> []:
         """
@@ -169,24 +188,24 @@ if __name__ == '__main__':
     # print(g)
 
 
-    print("\nPDF - method get_edges() example 1")
-    print("----------------------------------")
-    g = DirectedGraph()
-    print(g.get_edges(), g.get_vertices(), sep='\n')
-    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    g = DirectedGraph(edges)
-    print(g.get_edges(), g.get_vertices(), sep='\n')
-
-
-    # print("\nPDF - method is_valid_path() example 1")
-    # print("--------------------------------------")
+    # print("\nPDF - method get_edges() example 1")
+    # print("----------------------------------")
+    # g = DirectedGraph()
+    # print(g.get_edges(), g.get_vertices(), sep='\n')
     # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
     #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
     # g = DirectedGraph(edges)
-    # test_cases = [[0, 1, 4, 3], [1, 3, 2, 1], [0, 4], [4, 0], [], [2]]
-    # for path in test_cases:
-    #     print(path, g.is_valid_path(path))
+    # print(g.get_edges(), g.get_vertices(), sep='\n')
+
+
+    print("\nPDF - method is_valid_path() example 1")
+    print("--------------------------------------")
+    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    g = DirectedGraph(edges)
+    test_cases = [[0, 1, 4, 3], [1, 3, 2, 1], [0, 4], [4, 0], [], [2]]
+    for path in test_cases:
+        print(path, g.is_valid_path(path))
 
 
     # print("\nPDF - method dfs() and bfs() example 1")
