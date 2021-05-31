@@ -149,15 +149,64 @@ class DirectedGraph:
 
     def dfs(self, v_start, v_end=None) -> []:
         """
-        TODO: Write this implementation
+        Performs a depth-first search starting at the passed-in vertex.
+        param v_start: vertex to start the search
+        param v_end: vertex to end the search (defaults to None)
+        return: list of visited vertices
         """
-        pass
+        if not (0 <= v_start < self.v_count):
+            return []
+
+        vertices = []
+        stack = []
+        seen = set()
+
+        stack.append(v_start)
+
+        while stack and v_end not in seen:
+            item = stack.pop()
+            if item not in seen:
+                seen.add(item)
+                vertices.append(item)
+
+                # push adjacent vertices on to the stack
+                # iterate over adjacent vertices backwards
+                # this ensures vertices are explored in asending order
+                adjacent = self.adj_matrix[item]
+                for i in range(len(adjacent) - 1, -1, -1):
+                    if adjacent[i] != 0:
+                        stack.append(i)
+        return vertices
+        
 
     def bfs(self, v_start, v_end=None) -> []:
         """
-        TODO: Write this implementation
+        Performs a breadth-first search starting at the passed-in vertex.
+        param v_start: vertex to start the search
+        param v_end: vertex to end the search (defaults to None)
+        return: list of visited vertices
         """
-        pass
+        if not (0 <= v_start < self.v_count):
+            return []
+        
+        vertices = []
+        queue = deque()
+        seen = set()
+
+        queue.append(v_start)
+
+        while queue and v_end not in seen:
+            item = queue.popleft()
+            if item not in seen:
+                seen.add(item)
+                vertices.append(item)
+
+                # enqueue adjacent vertices in ascending order
+                adjacent = self.adj_matrix[item]
+                for i in range(len(adjacent)):
+                    if adjacent[i] != 0:
+                        queue.append(i)
+        return vertices
 
     def has_cycle(self):
         """
@@ -170,7 +219,6 @@ class DirectedGraph:
         TODO: Write this implementation
         """
         pass
-
 
 if __name__ == '__main__':
 
@@ -199,23 +247,23 @@ if __name__ == '__main__':
     # print(g.get_edges(), g.get_vertices(), sep='\n')
 
 
-    print("\nPDF - method is_valid_path() example 1")
-    print("--------------------------------------")
-    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    g = DirectedGraph(edges)
-    test_cases = [[0, 1, 4, 3], [1, 3, 2, 1], [0, 4], [4, 0], [], [2]]
-    for path in test_cases:
-        print(path, g.is_valid_path(path))
-
-
-    # print("\nPDF - method dfs() and bfs() example 1")
+    # print("\nPDF - method is_valid_path() example 1")
     # print("--------------------------------------")
     # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
     #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
     # g = DirectedGraph(edges)
-    # for start in range(5):
-    #     print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
+    # test_cases = [[0, 1, 4, 3], [1, 3, 2, 1], [0, 4], [4, 0], [], [2]]
+    # for path in test_cases:
+    #     print(path, g.is_valid_path(path))
+
+
+    print("\nPDF - method dfs() and bfs() example 1")
+    print("--------------------------------------")
+    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    g = DirectedGraph(edges)
+    for start in range(5):
+        print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
 
 
     # print("\nPDF - method has_cycle() example 1")
