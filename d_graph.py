@@ -210,9 +210,40 @@ class DirectedGraph:
 
     def has_cycle(self):
         """
-        TODO: Write this implementation
+        Determines whether or not the graph contains a cycle.
+        Requires detect_cycle helper method. 
+        return: True when cycle is found, else False
         """
-        pass
+        for i in range(len(self.adj_matrix)):
+            if self.detect_cycle(i):
+                return True
+        return False
+    
+    def detect_cycle(self, vertex: int) -> bool:
+        """
+        Detects whether or not the graph contains a cycle using DFS.
+        param vertex: vertex to start DFS from
+        return: True when cycle found, else False
+        """
+        visited = set()
+        stack = []
+
+        # stack will hold vertex and its parent
+        stack.append(vertex)
+
+        while stack:
+            cur_vertex = stack.pop()
+            if cur_vertex not in visited:
+                visited.add(cur_vertex)
+
+                # examine adjacent vertices
+                # when we make it back to the original vertex, we have a cycle
+                for i in range(len(self.adj_matrix[cur_vertex])):
+                    if self.adj_matrix[cur_vertex][i] != 0 and i not in visited:
+                        stack.append(i)
+                    elif self.adj_matrix[cur_vertex][i] != 0 and i == vertex:
+                        return True
+        return False
 
     def dijkstra(self, src: int) -> []:
         """
@@ -257,31 +288,32 @@ if __name__ == '__main__':
     #     print(path, g.is_valid_path(path))
 
 
-    print("\nPDF - method dfs() and bfs() example 1")
-    print("--------------------------------------")
-    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    g = DirectedGraph(edges)
-    for start in range(5):
-        print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
-
-
-    # print("\nPDF - method has_cycle() example 1")
-    # print("----------------------------------")
+    # print("\nPDF - method dfs() and bfs() example 1")
+    # print("--------------------------------------")
     # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
     #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
     # g = DirectedGraph(edges)
+    # for start in range(5):
+    #     print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
 
-    # edges_to_remove = [(3, 1), (4, 0), (3, 2)]
-    # for src, dst in edges_to_remove:
-    #     g.remove_edge(src, dst)
-    #     print(g.get_edges(), g.has_cycle(), sep='\n')
 
-    # edges_to_add = [(4, 3), (2, 3), (1, 3), (4, 0)]
-    # for src, dst in edges_to_add:
-    #     g.add_edge(src, dst)
-    #     print(g.get_edges(), g.has_cycle(), sep='\n')
-    # print('\n', g)
+    print("\nPDF - method has_cycle() example 1")
+    print("----------------------------------")
+    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    g = DirectedGraph(edges)
+
+    edges_to_remove = [(3, 1), (4, 0), (3, 2)]
+    for src, dst in edges_to_remove:
+        g.remove_edge(src, dst)
+        print(g.get_edges(), g.has_cycle(), sep='\n')
+
+    edges_to_add = [(4, 3), (2, 3), (1, 3), (4, 0)]
+    for src, dst in edges_to_add:
+        g.add_edge(src, dst)
+        print(g)
+        print(g.get_edges(), g.has_cycle(), sep='\n')
+    print('\n', g)
 
 
     # print("\nPDF - dijkstra() example 1")
