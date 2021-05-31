@@ -67,6 +67,7 @@ class DirectedGraph:
         # extend each other row to include the new vertex
         for i in range(len(self.adj_matrix) - 1):
             self.adj_matrix[i].append(0)
+        return self.v_count
 
     def add_edge(self, src: int, dst: int, weight=1) -> None:
         """
