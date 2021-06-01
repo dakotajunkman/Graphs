@@ -247,9 +247,51 @@ class DirectedGraph:
 
     def dijkstra(self, src: int) -> []:
         """
-        TODO: Write this implementation
+        Computes the shortest path from src vertex to all other vertices in the graph.
+        Requires shortest_path helper method.
+        param src: vertex to measure paths from
+        return: list of shortest paths where each index corresponds to a vertex in the graph
+            IE: vertex 0 will be index 0, vertex 1 is index 1, etc
         """
-        pass
+        # get shortest distances to each vertex
+        distance_map = self.shortest_path(src)
+        distances = []
+
+        for i in range(self.v_count):
+            if i in distance_map:
+                distances.append(distance_map[i])
+            else:
+                distances.append(float('inf'))
+        return distances
+
+    
+    def shortest_path(self, src: int) -> int:
+        """
+        Determines the shortes path from src vertex to every other vertex in the graph.
+        param src: vertex to determine distances from
+        return: dictionary with vertices as keys, and distance from src as values
+        """
+        distances = {}
+        heap = []
+
+        # add src and 0 to heap as a tuple
+        # 0 is first so it will be sorted by distances and shortest distance will rise to top of the heap
+        heapq.heappush(heap, (0, src))
+
+        # search adjacent vertices sorted by shortest distances
+        # add them to the distances dictionary to keep track of distances
+        while heap:
+            dist, vertex = heapq.heappop(heap)
+            if vertex not in distances:
+                distances[vertex] = dist
+                for i in range(len(self.adj_matrix[vertex])):
+                    next_dist = self.adj_matrix[vertex][i]
+                    if next_dist != 0:
+                        heapq.heappush(heap, (dist + next_dist, i))
+        return distances
+
+
+
 
 if __name__ == '__main__':
 
@@ -297,33 +339,33 @@ if __name__ == '__main__':
     #     print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
 
 
-    print("\nPDF - method has_cycle() example 1")
-    print("----------------------------------")
-    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    g = DirectedGraph(edges)
-
-    edges_to_remove = [(3, 1), (4, 0), (3, 2)]
-    for src, dst in edges_to_remove:
-        g.remove_edge(src, dst)
-        print(g.get_edges(), g.has_cycle(), sep='\n')
-
-    edges_to_add = [(4, 3), (2, 3), (1, 3), (4, 0)]
-    for src, dst in edges_to_add:
-        g.add_edge(src, dst)
-        print(g)
-        print(g.get_edges(), g.has_cycle(), sep='\n')
-    print('\n', g)
-
-
-    # print("\nPDF - dijkstra() example 1")
-    # print("--------------------------")
+    # print("\nPDF - method has_cycle() example 1")
+    # print("----------------------------------")
     # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
     #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
     # g = DirectedGraph(edges)
-    # for i in range(5):
-    #     print(f'DIJKSTRA {i} {g.dijkstra(i)}')
-    # g.remove_edge(4, 3)
+
+    # edges_to_remove = [(3, 1), (4, 0), (3, 2)]
+    # for src, dst in edges_to_remove:
+    #     g.remove_edge(src, dst)
+    #     print(g.get_edges(), g.has_cycle(), sep='\n')
+
+    # edges_to_add = [(4, 3), (2, 3), (1, 3), (4, 0)]
+    # for src, dst in edges_to_add:
+    #     g.add_edge(src, dst)
+    #     print(g)
+    #     print(g.get_edges(), g.has_cycle(), sep='\n')
     # print('\n', g)
-    # for i in range(5):
-    #     print(f'DIJKSTRA {i} {g.dijkstra(i)}')
+
+
+    print("\nPDF - dijkstra() example 1")
+    print("--------------------------")
+    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    g = DirectedGraph(edges)
+    for i in range(5):
+        print(f'DIJKSTRA {i} {g.dijkstra(i)}')
+    g.remove_edge(4, 3)
+    print('\n', g)
+    for i in range(5):
+        print(f'DIJKSTRA {i} {g.dijkstra(i)}')
